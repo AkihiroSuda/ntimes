@@ -1,5 +1,7 @@
 # ntimes: `[time(1)](http://linux.die.net/man/1/time)` with average time, flaky rate, ..
 
+[![Join the chat at https://gitter.im/AkihiroSuda/ntimes](https://badges.gitter.im/AkihiroSuda/ntimes.svg)](https://gitter.im/AkihiroSuda/ntimes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Join the chat at https://gitter.im/AkihiroSuda/ntimes](https://img.shields.io/badge/GITTER-join%20chat-green.svg)](https://gitter.im/AkihiroSuda/ntimes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/AkihiroSuda/ntimes.svg?branch=master)](https://travis-ci.org/AkihiroSuda/ntimes)
 [![Go Report Card](https://goreportcard.com/badge/github.com/AkihiroSuda/ntimes)](https://goreportcard.com/report/github.com/AkihiroSuda/ntimes)
