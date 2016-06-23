@@ -1,0 +1,106 @@
+.TH "NTIMES" "1" " General Commands Manual" "ntimes" "JUNE 2016" 
+.nh
+.ad l
+
+
+.SH NAME
+.PP
+ntimes \- \fBtime(1)\fP with average time, flaky rate, ..
+
+
+.SH SYNOPSIS
+.PP
+\fBntimes\fP [OPTIONS] COMMAND [arg...]
+
+
+.SH DESCRIPTION
+.PP
+ntimes is an improved version of \fBtime(1)\fP\&.
+
+.PP
+You can execute an command`N times, and measure the average/max/min time taken for the execution.
+You can also measure the "flaky" rate (i.e. failure rate).
+
+
+.SH OPTIONS
+.PP
+\fB\-\-help\fP
+  Print usage statement
+
+.PP
+\fB\-f\fP, \fB\-\-format\fP=\fI""\fP
+  Format string (in golang text/template, e.g. "{{json .}}")
+
+.PP
+\fB\-n\fP, \fB\-\-repeat\-n\-timesg\fP=\fI1\fP
+  Number of times
+
+
+.SH Examples
+.PP
+Example usage:
+
+.PP
+.RS
+
+.nf
+$ ntimes \-n 10 bash \-c 'sleep=$((RANDOM%5)); fail=$((RANDOM%2)); echo "id=$NTIMES\_ID, sleep=$sleep, fail=$fail"; sleep $sleep; exit $fail'
+id=0, sleep=3, fail=1
+id=1, sleep=4, fail=1
+id=2, sleep=3, fail=0
+id=3, sleep=1, fail=1
+id=4, sleep=0, fail=1
+id=5, sleep=3, fail=1
+id=6, sleep=2, fail=0
+id=7, sleep=0, fail=0
+id=8, sleep=4, fail=0
+id=9, sleep=1, fail=0
+
+average: 2.103107186s (user: 0, sys: 0)
+max: 4.00273996s (user: 0, sys: 0)
+min: 2.480336ms (user: 0, sys: 0)
+flaky: 50%
+
+.fi
+.RE
+
+.PP
+You can specify the report format using Go's \fBtext/template\fP syntax.
+Additionally to the standard functions provided by \fBtext/template\fP, the \fBjson\fP function is available.
+Note that a \fBtime.Duration\fP value is expressed in nanoseconds.
+
+.PP
+.RS
+
+.nf
+$ ntimes \-\-format "{{json .}}" \-n 10 dd if=/dev/urandom of=/dev/null bs=512 count=1000
+1000+0 records in
+1000+0 records out
+512000 bytes (512 kB, 500 KiB) copied, 0.0448978 s, 11.4 MB/s
+...
+{"average":{"real":41427898,"user":400000,"system":37600000},"max":{"real":48461571,"user":4000000,"system":44000000},"min":{"real":37805623,"user":0,"system":32000000},"flaky":0}
+
+.fi
+.RE
+
+.PP
+Please refer to \fBntimes \-\-help\fP for the detailed help.
+
+.PP
+.RS
+
+.nf
+$ ./ntimes \-\-help
+Usage: ./ntimes [OPTIONS] COMMAND [ARG...]
+  \-f, \-\-format string         format string (in golang text/template, e.g. "{{json .}}")
+  \-n, \-\-repeat\-n\-times uint   number of times (default 1)
+
+.fi
+.RE
+
+
+.SH AUTHOR
+.PP
+June 2016, writen by Akihiro Suda
+
+\[la]https://github.com/AkihiroSuda/ntimes\[ra]
