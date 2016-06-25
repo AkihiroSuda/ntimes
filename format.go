@@ -1,14 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
+	"io"
 	"text/template"
 )
 
 type formatter struct {
 	Format string
-	Writer *bufio.Writer
+	Writer io.Writer
 	tmpl   *template.Template
 }
 
@@ -24,6 +24,6 @@ func (f *formatter) Init() error {
 	return err
 }
 
-func (f *formatter) Execute(report *Report) error {
-	return f.tmpl.Execute(f.Writer, report)
+func (f *formatter) Execute(stat *Stat) error {
+	return f.tmpl.Execute(f.Writer, stat)
 }

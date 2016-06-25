@@ -28,6 +28,7 @@ set +x
 
 INFO "Testing"
 set -x
+go test -i
 go test -v -race -cover
 gometalinter --deadline 100s
 set +x
