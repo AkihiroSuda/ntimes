@@ -11,6 +11,7 @@ import (
 
 const defaultFormatTemplate = `
 real average: {{.Real.Average}}, max: {{.Real.Max}}, min: {{.Real.Min}}, std dev: {{.Real.StdDev}}
+real 99 percentile: {{index .Real.Percentiles "99"}}, 95 percentile: {{index .Real.Percentiles "95"}}, 50 percentile: {{index .Real.Percentiles "50"}}
 user average: {{.User.Average}}, max: {{.User.Max}}, min: {{.User.Min}}, std dev: {{.User.StdDev}}
 sys  average: {{.System.Average}}, max: {{.System.Max}}, min: {{.System.Min}}, std dev: {{.System.StdDev}}
 flaky: {{.Flaky}}%`

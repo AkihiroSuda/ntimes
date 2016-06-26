@@ -60,3 +60,31 @@ func TestMathStrange(t *testing.T) {
 	// again
 	assertAfterPhase0()
 }
+
+func TestMathPercentile(t *testing.T) {
+	// from the wikipedia "Worked Example of the First Variant"
+	// https://en.wikipedia.org/w/index.php?title=Percentile&oldid=724036224#Worked_Example_of_the_First_Variant
+	data := []Result{
+		{Real: 15 * time.Second},
+		{Real: 20 * time.Second},
+		{Real: 35 * time.Second},
+		{Real: 40 * time.Second},
+		{Real: 50 * time.Second},
+	}
+	t.Logf("data=%v", data)
+	p5 := percentile(data, 5, selReal)
+	t.Logf("5 percentile=%v", p5)
+	assert.Equal(t, 15*time.Second, p5)
+
+	p30 := percentile(data, 30, selReal)
+	t.Logf("30 percentile=%v", p30)
+	assert.Equal(t, 20*time.Second, p30)
+
+	p40 := percentile(data, 40, selReal)
+	t.Logf("40 percentile=%v", p40)
+	assert.Equal(t, 27*time.Second+500*time.Millisecond, p40)
+
+	p95 := percentile(data, 95, selReal)
+	t.Logf("95 percentile=%v", p95)
+	assert.Equal(t, 50*time.Second, p95)
+}

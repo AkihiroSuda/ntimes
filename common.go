@@ -32,7 +32,11 @@ type TimeStat struct {
 	// StdDev is a sample standard deviation,
 	// i.e. $\sqrt(varianceNumerator/(n-1))$
 	StdDev time.Duration `json:"stddev"`
-	sum    time.Duration
+	// Percentiles are percentile values.
+	// Uses "linear interpolation between closest ranks method, C=1/2".
+	// https://en.wikipedia.org/w/index.php?title=Percentile&oldid=724036224#First_Variant.2C_.7F.27.22.60UNIQ--postMath-0000002C-QINU.60.22.27.7F
+	Percentiles map[string]time.Duration `json:"percentiles,omitempty"`
+	sum         time.Duration
 	// varianceNumerator is $\sum (t-Average)^2$
 	varianceNumerator float64
 }

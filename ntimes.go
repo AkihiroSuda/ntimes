@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"time"
 )
@@ -186,6 +187,8 @@ func (nt *ntimes) storeResult(id int, result Result) error {
 	return file.Close()
 }
 
+// Stat returns a Stat.
+// This may change the order of nt.results.
 func (nt *ntimes) Stat() (*Stat, error) {
 	stat := &Stat{}
 	sels := []selector{selReal, selUser, selSystem}
@@ -193,5 +196,11 @@ func (nt *ntimes) Stat() (*Stat, error) {
 		&TimeStat{}, &TimeStat{}, &TimeStat{}
 	updateStatPhase0(stat, nt.results, sels)
 	updateStatPhase1(stat, nt.results, sels)
+	sort.Sort(resultsByReal(nt.results))
+	stat.Real.Percentiles = map[string]time.Duration{
+		"99": percentile(nt.results, 99, selReal),
+		"95": percentile(nt.results, 95, selReal),
+		"50": percentile(nt.results, 50, selReal),
+	}
 	return stat, nil
 }
