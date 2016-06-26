@@ -103,6 +103,6 @@ Please feel free to send your pull requests on github!
     $ cd ntimes
     $ git checkout -b your-branch
     $ vim foo.go
-    $ ./hack.sh
+    $ ./hack.sh all
     $ git commit -a -s
     
