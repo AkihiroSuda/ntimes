@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"math"
 	"time"
 )
@@ -106,7 +107,10 @@ func (a resultsByReal) Less(i, j int) bool { return a[i].Real < a[j].Real }
 // percentile computes percentile for p (0..99) using "linear interpolation between
 // closest ranks method, C=1/2"
 // https://en.wikipedia.org/w/index.php?title=Percentile&oldid=724036224#First_Variant.2C_.7F.27.22.60UNIQ--postMath-0000002C-QINU.60.22.27.7F
-func percentile(sorted []Result, P int, sel selector) time.Duration {
+func percentile(sorted []Result, P int, sel selector) (time.Duration, error) {
+	if P <= 0 || P >= 100 {
+		return 0, fmt.Errorf("strange P %d", P)
+	}
 	n := float64(len(sorted))
 	// fp computes $f(p)$ described in the "First Variant, C=1/2"
 	// section of the wikipedia article.
@@ -137,5 +141,5 @@ func percentile(sorted []Result, P int, sel selector) time.Duration {
 		_, vh := sel(nil, &sorted[idxh])
 		v += (math.Remainder(x, 1)) * (float64(vh) - float64(vl))
 	}
-	return time.Duration(v)
+	return time.Duration(v), nil
 }

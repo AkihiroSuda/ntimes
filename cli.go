@@ -30,11 +30,11 @@ type parsed struct {
 func parseArgs(args []string, stdin io.Reader, stdout, stderr io.Writer) (*parsed, error) {
 	p := &parsed{}
 	p.fs = pflag.NewFlagSet(args[0], pflag.ContinueOnError)
+	p.fs.SetOutput(stderr)
 	p.fs.Usage = func() {
 		fmt.Fprintf(stderr, "Usage: %s [OPTIONS] COMMAND [ARG...]\n", args[0])
 		p.fs.PrintDefaults()
 	}
-	p.fs.SetOutput(stderr)
 	p.fs.SetInterspersed(false)
 	p.fs.UintVarP(&p.n, "repeat-n-times", "n", 1, "number of times")
 	p.fs.StringVarP(&p.format, "format", "f", "", "format string (in golang text/template, e.g. \"{{json .}}\")")
@@ -52,24 +52,26 @@ func parseArgs(args []string, stdin io.Reader, stdout, stderr io.Writer) (*parse
 	return p, nil
 }
 
-func xmain(args []string, stdin io.Reader, stdout, stderr io.Writer) error {
+// xmain is main function made friendly to unit testing.
+// xmain may return *Stat.
+func xmain(args []string, stdin io.Reader, stdout, stderr io.Writer) (interface{}, error) {
 	p, err := parseArgs(args, stdin, stdout, stderr)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if p.version {
 		// should we use stderr here?
 		fmt.Fprintf(stdout, "%s\n", Version)
-		return nil
+		return nil, nil
 	}
 	if p.n == 0 {
-		return fmt.Errorf("n must be > 0")
+		return nil, fmt.Errorf("n must be > 0")
 	}
 	if p.warmup >= p.n {
-		return fmt.Errorf("warm-up must be < n")
+		return nil, fmt.Errorf("warm-up must be < n")
 	}
 	if len(p.args) < 1 {
-		return fmt.Errorf("no command specified."+
+		return nil, fmt.Errorf("no command specified."+
 			"Try '%s --help' for more information.",
 			args[0])
 	}
@@ -104,20 +106,20 @@ func xmain(args []string, stdin io.Reader, stdout, stderr io.Writer) error {
 	return doit(nt, f)
 }
 
-func doit(nt *ntimes, f *formatter) error {
+func doit(nt *ntimes, f *formatter) (interface{}, error) {
 	if err := f.Init(); err != nil {
-		return err
+		return nil, err
 	}
 	if err := nt.Run(); err != nil {
-		return err
+		return nil, err
 	}
 	stat, err := nt.Stat()
 	if err != nil {
-		return err
+		return stat, err
 	}
 	if err = f.Execute(stat); err != nil {
-		return err
+		return stat, err
 	}
 	_, err = f.Writer.Write([]byte("\n"))
-	return err
+	return stat, err
 }

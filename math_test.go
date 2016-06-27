@@ -72,19 +72,20 @@ func TestMathPercentile(t *testing.T) {
 		{Real: 50 * time.Second},
 	}
 	t.Logf("data=%v", data)
-	p5 := percentile(data, 5, selReal)
-	t.Logf("5 percentile=%v", p5)
-	assert.Equal(t, 15*time.Second, p5)
-
-	p30 := percentile(data, 30, selReal)
-	t.Logf("30 percentile=%v", p30)
-	assert.Equal(t, 20*time.Second, p30)
-
-	p40 := percentile(data, 40, selReal)
-	t.Logf("40 percentile=%v", p40)
-	assert.Equal(t, 27*time.Second+500*time.Millisecond, p40)
-
-	p95 := percentile(data, 95, selReal)
-	t.Logf("95 percentile=%v", p95)
-	assert.Equal(t, 50*time.Second, p95)
+	expected := map[int]time.Duration{
+		5:  15 * time.Second,
+		30: 20 * time.Second,
+		40: 27*time.Second + 500*time.Millisecond,
+		95: 50 * time.Second,
+	}
+	for i, d := range expected {
+		p, err := percentile(data, i, selReal)
+		assert.NoError(t, err)
+		t.Logf("%d percentile=%v", i, p)
+		assert.Equal(t, d, p)
+	}
+	_, err := percentile(data, 0, selReal)
+	assert.Error(t, err)
+	_, err = percentile(data, 100, selReal)
+	assert.Error(t, err)
 }

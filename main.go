@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	if err := xmain(os.Args,
+	if _, err := xmain(os.Args,
 		os.Stdin, os.Stdout, os.Stderr); err != nil {
 		if err != pflag.ErrHelp {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)

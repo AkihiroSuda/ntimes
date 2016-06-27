@@ -196,11 +196,16 @@ func (nt *ntimes) Stat() (*Stat, error) {
 		&TimeStat{}, &TimeStat{}, &TimeStat{}
 	updateStatPhase0(stat, nt.results, sels)
 	updateStatPhase1(stat, nt.results, sels)
+
+	// TODO: support percentiles for user and sys
 	sort.Sort(resultsByReal(nt.results))
-	stat.Real.Percentiles = map[string]time.Duration{
-		"99": percentile(nt.results, 99, selReal),
-		"95": percentile(nt.results, 95, selReal),
-		"50": percentile(nt.results, 50, selReal),
+	stat.Real.Percentiles = make(map[string]time.Duration, 0)
+	for _, i := range []int{99, 95, 50} {
+		p, err := percentile(nt.results, i, selReal)
+		if err != nil {
+			return stat, err
+		}
+		stat.Real.Percentiles[strconv.Itoa(i)] = p
 	}
 	return stat, nil
 }

@@ -2,6 +2,7 @@
 
 [![Join the chat at https://gitter.im/AkihiroSuda/ntimes](https://img.shields.io/badge/GITTER-join%20chat-green.svg)](https://gitter.im/AkihiroSuda/ntimes?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/AkihiroSuda/ntimes.svg?branch=master)](https://travis-ci.org/AkihiroSuda/ntimes)
+[![codecov](https://codecov.io/gh/AkihiroSuda/ntimes/branch/master/graph/badge.svg)](https://codecov.io/gh/AkihiroSuda/ntimes)
 [![Go Report Card](https://goreportcard.com/badge/github.com/AkihiroSuda/ntimes)](https://goreportcard.com/report/github.com/AkihiroSuda/ntimes)
 
 `ntimes` is an improved version of the  [`time(1)`](http://linux.die.net/man/1/time) command.
