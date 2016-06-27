@@ -35,10 +35,10 @@ Others:
 
 For Linux and macOS (experimental):
 
-    curl -L https://github.com/AkihiroSuda/ntimes/releases/download/NOTYETAVAILABLE/ntimes-`uname -s`-`uname -m` >/usr/local/bin/ntimes && \
+    curl -L https://github.com/AkihiroSuda/ntimes/releases/download/v0.1.0/ntimes-`uname -s`-`uname -m` >/usr/local/bin/ntimes && \
     chmod +x /usr/local/bin/ntimes
 
-For Windows (experimental): https://github.com/AkihiroSuda/ntimes/releases/download/NOTYETAVAILABLE/ntimes-windows-x86_64.exe
+For Windows (experimental): https://github.com/AkihiroSuda/ntimes/releases/download/v0.1.0/ntimes-windows-x86_64.exe
 
 Latest development version (requires Go):
 
