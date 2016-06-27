@@ -33,10 +33,16 @@ Others:
 
 ## Install
 
-    $ go get github.com/AkihiroSuda/ntimes
+For Linux and macOS (experimental):
 
-Currently, `ntimes` is only tested on Linux.
-But it should work on macOS and on Windows as well.
+    curl -L https://github.com/AkihiroSuda/ntimes/releases/download/NOTYETAVAILABLE/ntimes-`uname -s`-`uname -m` >/usr/local/bin/ntimes && \
+    chmod +x /usr/local/bin/ntimes
+
+For Windows (experimental): https://github.com/AkihiroSuda/ntimes/releases/download/NOTYETAVAILABLE/ntimes-windows-x86_64.exe
+
+Latest development version (requires Go):
+
+    $ go get github.com/AkihiroSuda/ntimes
 
 ## Usage
 
@@ -61,7 +67,7 @@ Example usage:
     flaky: 60%
 
 You can specify the report format using Go's [`text/template`](https://golang.org/pkg/text/template/) syntax.
-Additionally to the standard functions provided by `text/template`, the `json` function is available.
+Additionally to the standard functions provided by `text/template`, the `json` function is available as well.
 Note that a `time.Duration` value is expressed in nanoseconds.
 
 
@@ -71,6 +77,27 @@ Note that a `time.Duration` value is expressed in nanoseconds.
     512000 bytes (512 kB, 500 KiB) copied, 0.0448978 s, 11.4 MB/s
 	...
     {"real":{"average":44155207,"max":68222928,"min":38143407,"stddev":9421337,"percentiles":{"50":39855284,"95":68222928,"99":68222928}},"user":{"average":0,"max":0,"min":0,"stddev":0},"system":{"average":36000000,"max":36000000,"min":36000000,"stddev":0},"flaky":0}
+
+
+Practical example for debugging flaky tests with Namazu (`nmz`, [osrg/namazu](https://github.com/osrg/namazu)):
+
+    $ cd some_maven_project
+    $ sudo ntimes -n 10 --storage /tmp/logs nmz inspectors -cmd "mvn test"
+    ...
+    Flaky: 10%
+    
+    $ find /tmp/logs -name result.json | xargs jq .successful
+    true
+    true
+    true
+    false
+    true
+    true
+    true
+    true
+    true
+    true
+	
 
 Please refer to `ntimes --help` for the detailed help.
 
@@ -82,11 +109,25 @@ Please refer to `ntimes --help` for the detailed help.
       --version                   print version to stdout and exit
       --warm-up uint              skip first n iterations for stat
 
+
 ## Motivation
 
 Originally, `ntimes` was designed so that it can be combined with [osrg/namazu](https://github.com/osrg/namazu).
 Namazu can be used for controlling non-deternimism and increasing reproducibility of flaky test failures.
 `ntimes` can be used for measuring the reproducibility of flaky test failures.
+
+## Specification
+
+- When running a command, `NTIMES_ID` is passed to the command as an environment variable.
+The value of `NTIMES_ID` denotes a non-negative decimal value corresponding to the iteration count.
+(0, 1, .., n-1)
+
+- The format of statistics report is defined as `Stat` structure in [`common.go`](common.go).
+
+- If `--storage dir` is specified, following files are created in `dir/$NTIMES_ID`:
+    - `stdout`: containes the standard output
+	- `stderr`: containes the standard err
+	- `result.json`: JSON representation of a `Result` structure (defined in [`common.go`](common.go))
 
 ## Related Project
 

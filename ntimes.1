@@ -96,10 +96,38 @@ $ ntimes \-\-format "{{json .}}" \-n 10 dd if=/dev/urandom of=/dev/null bs=512 c
 .fi
 .RE
 
+.PP
+Practical example for debugging flaky tests with Namazu ( \fBnmz(1)\fP, 
+\[la]https://github.com/osrg/namazu):\[ra]
+
+.PP
+.RS
+
+.nf
+$ cd some\_maven\_project
+$ sudo ntimes \-n 10 \-\-storage /tmp/logs nmz inspectors \-cmd "mvn test"
+...
+Flaky: 10%
+
+$ find /tmp/logs \-name result.json | xargs jq .successful
+true
+true
+true
+false
+true
+true
+true
+true
+true
+true
+
+.fi
+.RE
+
 
 .SH SEE ALSO
 .PP
-\fBtime(1)\fP
+\fBtime(1)\fP, \fBnmz(1)\fP
 
 
 .SH AUTHOR

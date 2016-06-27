@@ -66,8 +66,28 @@ Note that a **time.Duration** value is expressed in nanoseconds.
 	...
     {"real":{"average":44155207,"max":68222928,"min":38143407,"stddev":9421337,"percentiles":{"50":39855284,"95":68222928,"99":68222928}},"user":{"average":0,"max":0,"min":0,"stddev":0},"system":{"average":36000000,"max":36000000,"min":36000000,"stddev":0},"flaky":0}
 
+Practical example for debugging flaky tests with Namazu ( **nmz(1)**, https://github.com/osrg/namazu):
+
+    $ cd some_maven_project
+    $ sudo ntimes -n 10 --storage /tmp/logs nmz inspectors -cmd "mvn test"
+    ...
+    Flaky: 10%
+    
+    $ find /tmp/logs -name result.json | xargs jq .successful
+    true
+    true
+    true
+    false
+    true
+    true
+    true
+    true
+    true
+    true
+
+
 # SEE ALSO
-**time(1)**
+**time(1)**, **nmz(1)**
 
 # AUTHOR
 June 2016, writen by Akihiro Suda
