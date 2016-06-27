@@ -6,7 +6,7 @@ import (
 
 const (
 	// Version is the version
-	Version = "0.0.1-dev"
+	Version = "0.1.0"
 )
 
 // Result is a result of an experiment
