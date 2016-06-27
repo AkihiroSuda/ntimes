@@ -45,7 +45,8 @@ func testCLI(t *testing.T, spec *testSpec) ([]byte, []byte, interface{}) {
 }
 
 func TestCLIVersion(t *testing.T) {
-	_, _, _ = testCLI(t, &testSpec{args: []string{"--version"}})
+	stdout, _, _ := testCLI(t, &testSpec{args: []string{"--version"}})
+	assert.Contains(t,string(stdout), Version)
 }
 
 func TestCLIBadArgs1(t *testing.T) {
