@@ -1,0 +1,18 @@
+name: CI
+on: [push, pull_request]
+jobs:
+  main:
+    strategy:
+      matrix:
+        go-version: [1.13.x, 1.14.x]
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+    - uses: actions/checkout@v2
+    - run: go get .
+    - run: go mod verify
+    - run: go fmt ./...
+    - run: go test -covermode=atomic -race -v
