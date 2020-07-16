@@ -134,14 +134,3 @@ Some projects similar to `ntimes`:
 - [ryanmjacobs/avgtime](https://github.com/ryanmjacobs/avgtime)
 - [kevinstreit/avgtime](https://github.com/kevinstreit/avgtime)
 
-
-## How to Contribute
-Please feel free to send your pull requests on github!
-
-    $ git clone https://github.com/AkihiroSuda/ntimes
-    $ cd ntimes
-    $ git checkout -b your-branch
-    $ vim foo.go
-    $ ./hack.sh all
-    $ git commit -a -s
-    
