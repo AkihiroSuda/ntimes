@@ -30,16 +30,12 @@ Others:
 
 ## Install
 
-For Linux and macOS (experimental):
+Download the latest binary (Linux/macOS/Windows) from https://github.com/AkihiroSuda/ntimes/releases
 
-    curl -L https://github.com/AkihiroSuda/ntimes/releases/download/v0.1.0/ntimes-`uname -s`-`uname -m` >/usr/local/bin/ntimes && \
-    chmod +x /usr/local/bin/ntimes
-
-For Windows (experimental): https://github.com/AkihiroSuda/ntimes/releases/download/v0.1.0/ntimes-windows-x86_64.exe
-
-Latest development version (requires Go):
-
-    $ go get github.com/AkihiroSuda/ntimes
+To build from the source:
+```console
+$ go get github.com/AkihiroSuda/ntimes
+```
 
 ## Usage
 
