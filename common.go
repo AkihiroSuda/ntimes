@@ -4,11 +4,6 @@ import (
 	"time"
 )
 
-const (
-	// Version is the version
-	Version = "0.1.1-dev"
-)
-
 // Result is a result of an experiment
 type Result struct {
 	ID         int           `json:"id"`

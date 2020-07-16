@@ -1,0 +1,66 @@
+name: Release
+on:
+  push:
+    tags:
+    - 'v*'
+env:
+  GO111MODULE: on
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: 1.13.x
+    - uses: actions/checkout@v2
+    - run: mkdir -p /tmp/artifact
+    - run: GOOS=linux GOARCH=amd64 go build -o /tmp/artifact/ntimes-linux-x86_64
+    - run: GOOS=darwin GOARCH=amd64 go build -o /tmp/artifact/ntimes-darwin-x86_64
+    - run: GOOS=windows GOARCH=amd64 go build -o /tmp/artifact/ntimes-windows-x86_64.exe
+    - name: "SHA256SUMS"
+      run: (cd /tmp/artifact; sha256sum *) | tee /tmp/SHA256SUMS
+    - name: "Create release"
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        draft: true
+    - name: "Upload ntimes-linux-x86_64"
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /tmp/artifact/ntimes-linux-x86_64
+        asset_name: ntimes-linux-x86_64
+        asset_content_type: application/octet-stream
+    - name: "Upload ntimes-darwin-x86_64"
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /tmp/artifact/ntimes-darwin-x86_64
+        asset_name: ntimes-darwin-x86_64
+        asset_content_type: application/octet-stream
+    - name: "Upload ntimes-windows-x86_64.exe"
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /tmp/artifact/ntimes-windows-x86_64.exe
+        asset_name: ntimes-windows-x86_64.exe
+        asset_content_type: application/octet-stream
+    - name: "Upload SHA256SUMS"
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: /tmp/SHA256SUMS
+        asset_name: SHA256SUMS
+        asset_content_type: text/plain
