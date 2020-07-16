@@ -46,7 +46,7 @@ func testCLI(t *testing.T, spec *testSpec) ([]byte, []byte, interface{}) {
 
 func TestCLIVersion(t *testing.T) {
 	stdout, _, _ := testCLI(t, &testSpec{args: []string{"--version"}})
-	assert.Contains(t,string(stdout), Version)
+	assert.Contains(t, string(stdout), Version)
 }
 
 func TestCLIBadArgs1(t *testing.T) {
@@ -120,6 +120,7 @@ func TestCLI2(t *testing.T) {
 		assert.NoError(t, err)
 		assert.Empty(t, xstderr)
 		xresult, err := ioutil.ReadFile(filepath.Join(dir, "result.json"))
+		assert.NoError(t, err)
 		var result Result
 		err = json.Unmarshal(xresult, &result)
 		assert.NoError(t, err)
