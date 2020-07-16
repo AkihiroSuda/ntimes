@@ -1,12 +1,12 @@
 language: go
 
 go:
-  - "1.11.x"
+  - "1.14.x"
 
 script:
-  - go build
+  - go get .
+  - go mod verify
   - go fmt ./...
-  - go vet ./...
   - go test -coverprofile=coverage.txt -covermode=atomic -race -v ./...
 
 after_success:
